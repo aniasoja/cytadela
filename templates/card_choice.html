@@ -1,0 +1,22 @@
+<!DOCTYPE html>
+<html lang="en" dir="ltr">
+  <head>
+    <meta charset="utf-8">
+  </head>
+  <body>
+    {% extends "cards.html" %}
+    {% block play %}
+        <div class="player">
+        <p>Którą kartę {{ choice }}?</p>
+        <table>
+            <tr>
+            {% for i in free_characters %}
+                <td><a href="/choose_cards/{{ apprem }}/{{ i.name }}">
+                    <img src="/static/{{ i.name }}.jpg" class="character"/></a></td>
+            {% endfor %}
+            </tr>
+        </table>
+        </div>
+    {% endblock %}
+  </body>
+</html>

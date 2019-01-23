@@ -1,0 +1,72 @@
+<!DOCTYPE html>
+<html lang="en" dir="ltr">
+  <head>
+    <meta charset="utf-8">
+    <title>Cytadela</title>
+
+      <style>
+          aside{
+              max-width: 20%;
+              height: 100%;
+          }
+
+          .left {
+              float:left;
+          }
+
+          .right {
+              float:right;
+          }
+
+          .important{
+              width: 100%;
+          }
+
+          .sidelist {
+              width: 45%;
+              display: inline-block;
+          }
+          .player{
+              width: 55%;
+              float: left;
+          }
+          img{
+              max-width: 180px;
+          }
+          .character{
+              max-width: 100px;
+          }
+
+      </style>
+  </head>
+  <body>
+     <aside class="left">
+        <div>
+            <img src="/static/4a.jpg" class = "sidelist" alt="king">
+            <img src="/static/8a.jpg" class = "sidelist" alt="warlord">
+        </div>
+        <div>
+            <img src="/static/3a.jpg" class = "sidelist" alt="magician">
+            <img src="/static/7a.jpg" class = "sidelist" alt="architect">
+        </div>
+        <div>
+            <img src="/static/2a.jpg" class = "sidelist" alt="thief">
+            <img src="/static/6a.jpg" class = "sidelist" alt="merchant">
+        </div>
+        <div>
+            <img src="/static/1a.jpg" class = "sidelist" alt="assassin">
+            <img src="/static/5a.jpg" class = "sidelist" alt="bishop">
+        </div>
+
+    </aside>
+
+    <section>
+        {% block content %}
+        {% endblock %}
+    </section>
+    <aside class = "right">
+        <img src="/static/back.png" class = "important" alt="back">
+        <img src="/static/bank.png" class = "important" alt="bank">
+    </aside>
+  </body>
+</html>

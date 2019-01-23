@@ -1,0 +1,20 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+</head>
+<body>
+    <p>Teraz kolej {{ character.name }}</p>
+    <img src="/static/{{ character.name }}.jpg">
+    {% if var=='robbed' %}
+        <p>Złodziej obrabował wszystkie Twoje pieniądze</p>
+    {% endif %}
+    {% if var=='victim' %}
+        <p>Ta postać została zamordowana i nie może grać swojej tury</p>
+        <a href="/game">Następna postać</a>
+        {% else %}
+        Teraz kolej gracza {{ next_player.imie }}. Inni gracze nie powinni widzieć ekranu!
+        <a href="/player_round/{{ next_player.name }}/{{ character.name }}">OK</a>
+    {% endif %}
+</body>
+</html>

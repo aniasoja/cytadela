@@ -1,0 +1,54 @@
+<!DOCTYPE html>
+<html lang="en" dir="ltr">
+  <head>
+    <meta charset="utf-8">
+  </head>
+  <body>
+    {% extends "template.html" %}
+    {% block content %}
+        <div class="player">
+        <table>
+        <tr>
+            {% for i in opponent.districts_in_hand %}
+               <td><img src="/static/back_d.png"/></td>
+            {% endfor %}
+            {% for i in opponent.characters %}
+                {% if i.name !='' %}
+                    <td><img src="/static/back.png"/></td>
+                {% endif %}
+            {% endfor %}
+            {% if crowned == opponent %}
+                <td><img src="/static/crown.jpg"/></td>
+            {% endif %}
+        <tr>
+            {% for i in opponent.districts_built %}
+               <td> <img src="/static/{{ i.name }}.jpg"/> </td>
+            {% endfor %}
+        </tr>
+        </table>
+        </div>
+        {% block play %}
+        {% endblock %}
+         <div class="player">
+        <table>
+        <tr>
+            {% for i in next_player.characters %}
+                <td><img src="/static/{{ i.name }}.jpg"</td>
+            {% endfor %}
+            {% for i in next_player.districts_in_hand %}
+               <td> <img src="/static/{{ i.name }}.jpg"/> </td>
+            {% endfor %}
+            {% if next_player == crowned %}
+                <td><img src="/static/crown.jpg"/></td>
+            {% endif %}
+        </tr>
+        <tr>
+            {% for i in next_player.districts_built %}
+               <td> <img src="/static/{{ i.name }}.jpg"/> </td>
+            {% endfor %}
+        </tr>
+        </table>
+        </div>
+    {% endblock %}
+  </body>
+</html>

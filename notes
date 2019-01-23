@@ -1,0 +1,9 @@
+
+    free_characters = all_characters.copy()
+    for x in all_characters:
+        if x in player1.characters:
+            player1.characters.remove(x)
+        elif x in player2.characters:
+            player2.characters.remove(x)
+
+
