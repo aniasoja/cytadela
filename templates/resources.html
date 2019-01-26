@@ -1,0 +1,18 @@
+<!DOCTYPE html>
+<html lang="en" dir="ltr">
+  <head>
+    <meta charset="utf-8">
+  </head>
+  <body>
+    {% extends "cards.html" %}
+    {% block bank %}
+    <aside class = "right">
+        <a href="/resources/district/{{ character }}">
+            <img src="/static/back.png" class = "important" alt="back">Pobierz dwie dzielnice i oddaj jedną z nich do banku</a>
+        <a href="/resources/money/{{ character }}">
+            <img src="/static/bank.png" class = "important" alt="bank">Pobierz dwie monety</a>
+    </aside>
+  {% endblock %}
+  
+  </body>
+</html>

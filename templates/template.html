@@ -36,6 +36,12 @@
           .character{
               max-width: 100px;
           }
+          .district a{
+              color:white;
+          }
+          .district:hover{
+              color: red;
+          }
 
       </style>
   </head>
@@ -43,30 +49,38 @@
      <aside class="left">
         <div>
             <img src="/static/4a.jpg" class = "sidelist" alt="king">
+            {% if victim == 'king' %}<img src="/static/knife.jpg">{% endif %}{% if robbed == 'king' %}<img src="/static/pouch">{% endif %}
             <img src="/static/8a.jpg" class = "sidelist" alt="warlord">
+        {% if victim == 'warlord' %}<img src="/static/knife.jpg">{% endif %}{% if robbed == 'warlord' %}<img src="/static/pouch">{% endif %}
         </div>
         <div>
             <img src="/static/3a.jpg" class = "sidelist" alt="magician">
+            {% if victim == 'magician' %}<img src="/static/knife.jpg">{% endif %}{% if robbed == 'magician' %}<img src="/static/pouch">{% endif %}
             <img src="/static/7a.jpg" class = "sidelist" alt="architect">
+        {% if victim == 'warlord' %}<img src="/static/knife.jpg">{% endif %}{% if robbed == 'warlord' %}<img src="/static/pouch">{% endif %}
         </div>
         <div>
             <img src="/static/2a.jpg" class = "sidelist" alt="thief">
+            {% if victim == 'thief' %}<img src="/static/knife.jpg">{% endif %}
             <img src="/static/6a.jpg" class = "sidelist" alt="merchant">
+        {% if victim == 'merchant' %}<img src="/static/knife.jpg">{% endif %}{% if robbed == 'merchant' %}<img src="/static/pouch">{% endif %}
         </div>
         <div>
             <img src="/static/1a.jpg" class = "sidelist" alt="assassin">
             <img src="/static/5a.jpg" class = "sidelist" alt="bishop">
+            {% if victim == 'bishop' %}<img src="/static/knife.jpg">{% endif %}{% if robbed == 'bishop' %}<img src="/static/pouch">{% endif %}
         </div>
-
     </aside>
 
     <section>
         {% block content %}
         {% endblock %}
     </section>
+     {% block bank %}
     <aside class = "right">
         <img src="/static/back.png" class = "important" alt="back">
         <img src="/static/bank.png" class = "important" alt="bank">
     </aside>
+  {% endblock %}
   </body>
 </html>

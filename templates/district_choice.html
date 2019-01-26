@@ -1,0 +1,15 @@
+<!DOCTYPE html>
+<html lang="en" dir="ltr">
+  <head>
+    <meta charset="utf-8">
+  </head>
+  <body>
+    {% extends "cards.html" %}
+    {% block play %}
+
+        <a href="/district/{{ a.name }}/{{ b.name }}/{{ character }}"/><img src="/static/{{ a.name }}.jpg"></a>
+        <a href="/district/{{ b.name }}/{{ a.name }}/{{ character }}"/><img src="/static/{{ b.name }}.jpg"></a>
+
+    {% endblock %}
+  </body>
+</html>

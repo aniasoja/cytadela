@@ -9,16 +9,25 @@
 
 <p>Teraz kolej postaci {{ character }}</p>
         {% if resources == True %}
-            <a href="/resources">Pobierz zasoby</a>
-        {% endif %}
-        {% if build == True %}
-            <a href="/build">Zbuduj dzielnicę</a>
+            <a href="/resource/{{ character }}">Pobierz zasoby</a>
         {% endif %}
         {% if skill == True %}
-            <a href="/skill">Użyj zdolności postaci</a>
+            <a href="/skill/{{ character }}">Użyj zdolności postaci</a>
         {% endif %}
-        <a href="/game">Koniec kolejki</a>
-
-    {% endblock %}
+        {% if resources == False %}
+            <a href="/game">Koniec kolejki</a>
+        {% endif %}
+{% endblock %}
+{% block districts %}
+            {% if build == True and resources == False %}
+              {% for i in next_player.districts_in_hand %}
+                   <td><a href="/build/{{ i.name }}"> <img src="/static/{{ i.name }}.jpg" class="district"/>Wybuduj</a> </td>
+               {% endfor %}
+            {% else %}
+                {% for i in next_player.districts_in_hand %}
+                   <td><img src="/static/{{ i.name }}.jpg" class="district"/></td>
+                {% endfor %}
+            {% endif %}
+        {% endblock %}
   </body>
 </html>

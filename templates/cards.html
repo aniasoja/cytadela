@@ -28,27 +28,36 @@
         </table>
         </div>
         {% block play %}
-        {% endblock %}
+            {% endblock %}
          <div class="player">
         <table>
-        <tr>
-            {% for i in next_player.characters %}
-                <td><img src="/static/{{ i.name }}.jpg"</td>
-            {% endfor %}
-            {% for i in next_player.districts_in_hand %}
-               <td> <img src="/static/{{ i.name }}.jpg"/> </td>
-            {% endfor %}
-            {% if next_player == crowned %}
-                <td><img src="/static/crown.jpg"/></td>
-            {% endif %}
-        </tr>
         <tr>
             {% for i in next_player.districts_built %}
                <td> <img src="/static/{{ i.name }}.jpg"/> </td>
             {% endfor %}
         </tr>
+        <tr>
+            {% for i in next_player.characters %}
+                <td><img src="/static/{{ i.name }}.jpg"</td>
+            {% endfor %}
+        {% block districts %}
+            {% for i in next_player.districts_in_hand %}
+               <td> <img src="/static/{{ i.name }}.jpg"/> </td>
+            {% endfor %}
+        {% endblock %}
+            {% if next_player == crowned %}
+                <td><img src="/static/crown.jpg"/></td>
+            {% endif %}
+        </tr>
+        </table>
+         <table>
+        <tr>
+            {% for i in range(next_player.money) %}
+                <td><img src="/static/coin.png"/></td>
+            {% endfor %}
+        </tr>
         </table>
         </div>
-    {% endblock %}
+  {% endblock %}
   </body>
 </html>

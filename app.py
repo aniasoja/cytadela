@@ -16,18 +16,6 @@ class Characters:
         self.description = description
         self.skill_used = False
 
-
-class Assassin(Characters):
-    def skill(self, player):
-        global victim
-        victim = input('Którą postać chcesz zabić?\n')
-        if victim == 'assassin':
-            assassin.skill(player)
-        for x in all_characters:
-            if victim == x.name:
-                victim = x
-
-
 class Thief(Characters):
     def skill(self, player):
         global robbed
@@ -102,7 +90,7 @@ class Architect(Characters):
         for c in range(1, 4):
             d = input('Czy chcesz wybudować dodatkową dzielnicę?')
             if d == 'y':
-                Game.build(player)
+                build(player)
             else:
                 break
 
@@ -233,7 +221,7 @@ all_characters = []
 free_characters = []
 victim = ''
 robbed = ''
-assassin = Assassin('assassin', 1, '')
+assassin = Characters('assassin', 1, '')
 all_characters.append(assassin)
 thief = Thief('thief', 2, '')
 all_characters.append(thief)
@@ -254,11 +242,19 @@ free_characters = all_characters.copy()
 choice = ''
 apprem = ''
 round = 1
+resources = False
+skill = False
+build = False
 
 app = Flask(__name__)
+
+
 @app.route("/")
 def start():
-    return render_template("home.html")
+    global victim
+    global robbed
+    return render_template("home.html", vitim=victim, robbed=robbed)
+
 
 @app.route("/players/<string:par>")
 def players(par):
@@ -274,6 +270,7 @@ def players(par):
             next_player = player2
         return render_template("pass_names.html")
 
+
 @app.route('/names', methods=['POST'])
 def names():
     player1.imie = request.form['player1']
@@ -288,6 +285,8 @@ def phases():
     global next_player
     global round
     global opponent
+    global victim
+    global robbed
     print(round)
     if round>8:
         return game()
@@ -306,7 +305,8 @@ def phases():
                 opponent = player2
             else: opponent = player1
             return render_template("card_choice.html", free_characters=free_characters, next_player=next_player,
-                                   crowned=crowned, choice=choice, apprem=apprem, opponent=opponent)
+                                   crowned=crowned, choice=choice, apprem=apprem, opponent=opponent, victim=victim,
+                                   robbed=robbed)
     else:
         choice = 'wybierasz'
         apprem = 'append'
@@ -316,11 +316,13 @@ def phases():
         else:
             opponent = player1
         return render_template("card_choice.html", free_characters=free_characters, next_player=next_player,
-                           crowned=crowned, choice=choice, apprem=apprem, opponent=opponent)
+                           crowned=crowned, choice=choice, apprem=apprem, opponent=opponent, vitim=victim, robbed=robbed)
+
 
 @app.route("/choose_cards/<string:apprem>/<string:choice>")
 def choose_cards(apprem, choice):
     global next_player
+    global free_characters
     for x in free_characters:
         if choice == x.name:
             choice = x
@@ -335,13 +337,17 @@ def choose_cards(apprem, choice):
         return phases()
     return render_template("now.html", next_player=next_player, crowned=crowned, round=round)
 
+
 @app.route("/game")
 def game():
     for y in all_characters:
         if y in player1.characters:
+            next_player = player1
             return game_round(player1, y)
         if y in player2.characters:
+            next_player = player2
             return game_round(player2, y)
+
 
 @app.route("/game_round/<string:player>/<string:character>")
 def game_round(next_player, character):
@@ -353,18 +359,29 @@ def game_round(next_player, character):
     global robbed
     if character is victim:
         var='victim'
-        return render_template("character.html", var=var, character=character, next_player=next_player)
+        return render_template("character.html", var=var, character=character, next_player=next_player, victim=victim,
+                               robbed=robbed)
     if character is robbed:
         a = next_player.money
         other_player.money += a
         next_player.money = 0
         var='robbed'
-        return render_template("character.html", var=var, character=character, next_player=next_player)
-    return render_template("character.html", character=character, next_player=next_player)
+        return render_template("character.html", var=var, character=character, next_player=next_player, vitim=victim,
+                               robbed=robbed)
+    return render_template("character.html", character=character, next_player=next_player, victim=victim, robbed=robbed)
+
 
 @app.route("/player_round/<string:next_player>/<string:character>")
 def player_round(next_player, character):
     global crowned
+    global victim
+    global robbed
+    global resources
+    global skill
+    global build
+    resources = True
+    skill = True
+    build = True
     if next_player == player1.name:
         next_player = player1
         opponent = player2
@@ -372,17 +389,117 @@ def player_round(next_player, character):
         next_player=player2
         opponent = player1
     return render_template("game.html", next_player=next_player, character=character, opponent=opponent,
-                           crowned=crowned, resources=True, skill=True, build=True)
+                           crowned=crowned, resources=resources, skill=skill, build=build, victim=victim, robbed=robbed)
 
-@app.route('/resources')
-@app.rut('/build')
+
+@app.route('/resource/<string:character>')
+def resources(character):
+    global victim
+    global robbed
+    global next_player
+    if player1 == next_player:
+        opponent = player2
+    else: opponent = player1
+    return render_template("resources.html", next_player=next_player, opponent=opponent, character=character,
+                           victim=victim, robbed=robbed)
+
+
+@app.route("/resources/<string:mod>/<string:character>")
+def mod_func(mod, character):
+    global free_districts
+    global next_player
+    global victim
+    global robbed
+    global resources
+    global skill
+    global build
+    if next_player == player1.name:
+        next_player = player1
+    else: next_player = player2
+    if mod == 'money':
+        next_player.money += 2
+        resources = False
+        return render_template("game.html", next_player=next_player, character=character, opponent=opponent,
+                               crowned=crowned, resources=resources, skill=skill, build=build, vitim=victim, robbed=robbed)
+    if mod == 'district':
+        a = free_districts[0]
+        b = free_districts[1]
+        return render_template("district_choice.html", a=a, b=b, next_player=next_player, character=character, opponent=opponent,
+                               crowned=crowned, vitim=victim, robbed=robbed)
+
+
+@app.route("/district/<string:dischoi>/<string:unchoi>/<string:character>")
+def district_choice(dischoi,unchoi, character):
+    global free_districts
+    global resources
+    global skill
+    global build
+    global next_player
+    global crowned
+    global victim
+    global robbed
+    if next_player == player1:
+        opponent = player2
+    else: opponent = player1
+    for i in free_districts:
+        if i.name == dischoi:
+            dischoi = i
+    for i in free_districts:
+        if i.name == unchoi:
+            unchoi = i
+    next_player.districts_in_hand.append(dischoi)
+    free_districts.remove(dischoi)
+    free_districts.remove(unchoi)
+    free_districts.append(unchoi)
+    resources = False
+    return render_template("game.html", next_player=next_player, character=character, opponent=opponent,
+                           crowned=crowned, resources=resources, skill=skill, build=build, victim=victim, robbed=robbed)
+
+
+@app.route('/build/<string:district>')
+def build():
+    global first
+    global next_player
+    for x in next_player.districts_in_hand:
+        if x.name == district:
+            district = x
+            break
+    if district.price > next_player.money:
+        flash("Nie stać cię na tę dzielnicę!")
+    else:
+        next_player.districts_in_hand.remove(district)
+        next_player.districts_built.append(district)
+        next_player.money -= district.price
+    if next_player.districts_built == 8:
+        if first == None:
+            first = next_player
+
 
 @app.route('/skill/<string:character>')
-def skill():
+def skill(character):
+    global next_player
+    global all_characters
+    for i in all_characters:
+        if i.name == character:
+            character = i
     character.skill(next_player)
     character.skill_used = True
-    Game.resources(next_player)
-    Game.build(next_player)
+    return render_template("{{ character }}.html", all_characters=all_characters)
+
+
+@app.route('/assassin/<string:victim>')
+def assassin(victim):
+    global next_player
+    global all_characters
+    global resources
+    global skill
+    global build
+    for x in all_characters:
+        if victim == x.name:
+            victim = x
+    return render_template("game.html", next_player=next_player, character=character, opponent=opponent,
+                           crowned=crowned, resources=resources, skill=skill, build=build, victim=victim, robbed=robbed)
+
 
 if __name__ == "__main__":
     app.run(debug=True)

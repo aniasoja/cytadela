@@ -1,0 +1,18 @@
+<!DOCTYPE html>
+<html lang="en" dir="ltr">
+  <head>
+    <meta charset="utf-8">
+  </head>
+  <body>
+    {% extends "cards.html" %}
+    {% block play %}
+
+        {% for i in all_characters %}
+            {% if i.name != assassin %}
+                <a href="/assassin/{{ i.name }}"><img src="/static/{{ i.name }}.jpg"></a>
+            {% endif %}
+        {% endfor %}
+
+{% endblock %}
+  </body>
+</html>
