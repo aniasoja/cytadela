@@ -16,42 +16,6 @@ class Characters:
         self.description = description
         self.skill_used = False
 
-class Thief(Characters):
-    def skill(self, player):
-        global robbed
-        robbed = input('Którą postać chcesz okraść? Nie możesz okraść martej postaci ani zabójcy\n')
-        if robbed is assassin or robbed is victim:
-            skill(self, player)
-        for x in all_characters:
-            if robbed == x.name:
-                robbed = x
-
-
-class Magician(Characters):
-    def skill(self, player):
-        global free_districts
-        a = input(
-            'Chcesz wymienić swoje dzielnice z innym graczem (wszystkie za wszytskie) czy z talią (dowolna ilość?\n')
-        if a == 'g':
-            b = player1.districts_in_hand
-            player1.districts_in_hand = player2.districts_in_hand
-            player2.districts_in_hand = b
-        elif a == 't':
-            c = input('Ile kart swoich dzielnic chcesz wymienić?\n')
-            c = int(c)
-            for d in range(1, c + 1):
-                for f in player.districts_in_hand:
-                    print(f.name)
-                e = input('Którą dzielnicę chcesz wymienić?\n')
-                for x in player.districts_in_hand:
-                    if e == x.name:
-                        e = x
-                player.districts_in_hand.remove(e)
-                free_districts.append(e)
-            for d in range(1, c + 1):
-                g = random.choice(free_districts)
-                player.districts_in_hand.append(g)
-
 
 class King(Characters):
     def skill(self, player):
@@ -287,6 +251,7 @@ def phases():
     global opponent
     global victim
     global robbed
+    print(next_player.name+"1")
     print(round)
     if round>8:
         return game()
@@ -322,6 +287,7 @@ def phases():
 @app.route("/choose_cards/<string:apprem>/<string:choice>")
 def choose_cards(apprem, choice):
     global next_player
+    print(next_player.name+"2")
     global free_characters
     for x in free_characters:
         if choice == x.name:
@@ -340,30 +306,33 @@ def choose_cards(apprem, choice):
 
 @app.route("/game")
 def game():
+    global next_player
+    global character
     for y in all_characters:
         if y in player1.characters:
             next_player = player1
-            return game_round(player1, y)
+            return game_round(y)
         if y in player2.characters:
             next_player = player2
-            return game_round(player2, y)
+            return game_round(y)
 
 
-@app.route("/game_round/<string:player>/<string:character>")
-def game_round(next_player, character):
-    if next_player is player1:
-        other_player = player2
-    elif next_player is player2:
-        other_player = player1
+@app.route("/game_round/<string:character>")
+def game_round(character):
+    global next_player
     global victim
     global robbed
+    if next_player is player1:
+        opponent = player2
+    elif next_player is player2:
+        opponent = player1
     if character is victim:
         var='victim'
         return render_template("character.html", var=var, character=character, next_player=next_player, victim=victim,
                                robbed=robbed)
     if character is robbed:
         a = next_player.money
-        other_player.money += a
+        opponent.money += a
         next_player.money = 0
         var='robbed'
         return render_template("character.html", var=var, character=character, next_player=next_player, vitim=victim,
@@ -371,23 +340,22 @@ def game_round(next_player, character):
     return render_template("character.html", character=character, next_player=next_player, victim=victim, robbed=robbed)
 
 
-@app.route("/player_round/<string:next_player>/<string:character>")
-def player_round(next_player, character):
+@app.route("/player_round/<string:character>")
+def player_round(character):
     global crowned
     global victim
     global robbed
     global resources
     global skill
     global build
+    global next_player
+    print(next_player.name+"5")
     resources = True
     skill = True
     build = True
-    if next_player == player1.name:
-        next_player = player1
+    if next_player == player1:
         opponent = player2
-    else:
-        next_player=player2
-        opponent = player1
+    else: opponent = player1
     return render_template("game.html", next_player=next_player, character=character, opponent=opponent,
                            crowned=crowned, resources=resources, skill=skill, build=build, victim=victim, robbed=robbed)
 
@@ -397,6 +365,7 @@ def resources(character):
     global victim
     global robbed
     global next_player
+    print(next_player.name+" 6")
     if player1 == next_player:
         opponent = player2
     else: opponent = player1
@@ -413,9 +382,6 @@ def mod_func(mod, character):
     global resources
     global skill
     global build
-    if next_player == player1.name:
-        next_player = player1
-    else: next_player = player2
     if mod == 'money':
         next_player.money += 2
         resources = False
@@ -457,7 +423,7 @@ def district_choice(dischoi,unchoi, character):
 
 
 @app.route('/build/<string:district>')
-def build():
+def build(district):
     global first
     global next_player
     for x in next_player.districts_in_hand:
@@ -479,11 +445,12 @@ def build():
 def skill(character):
     global next_player
     global all_characters
+    global skill
     for i in all_characters:
         if i.name == character:
             character = i
-    character.skill(next_player)
     character.skill_used = True
+    skill = False
     return render_template("{{ character }}.html", all_characters=all_characters)
 
 
@@ -497,9 +464,45 @@ def assassin(victim):
     for x in all_characters:
         if victim == x.name:
             victim = x
-    return render_template("game.html", next_player=next_player, character=character, opponent=opponent,
+    if build==True:
+        return render_template("game.html", next_player=next_player, character=character, opponent=opponent,
                            crowned=crowned, resources=resources, skill=skill, build=build, victim=victim, robbed=robbed)
 
 
+@app.route('/thief/<string:victim>')
+def thief(victim):
+    global robbed
+    for x in all_characters:
+        if robbed == x.name:
+            robbed = x
+
+
+@app.route("/magician/<string:god>")
+def magician(god):
+    global free_districts
+    if god == 'gamer':
+        b = player1.districts_in_hand
+        player1.districts_in_hand = player2.districts_in_hand
+        player2.districts_in_hand = b
+    elif god == 'deck':
+        return render_template("magician_deck.html")
+
+
+@app.route("/magician_deck")
+def magician_deck()
+        c = input('Ile kart swoich dzielnic chcesz wymienić?\n')
+        c = int(c)
+        for d in range(1, c + 1):
+                for f in player.districts_in_hand:
+                    print(f.name)
+                e = input('Którą dzielnicę chcesz wymienić?\n')
+                for x in player.districts_in_hand:
+                    if e == x.name:
+                        e = x
+                player.districts_in_hand.remove(e)
+                free_districts.append(e)
+            for d in range(1, c + 1):
+                g = random.choice(free_districts)
+                player.districts_in_hand.append(g)
 if __name__ == "__main__":
     app.run(debug=True)
