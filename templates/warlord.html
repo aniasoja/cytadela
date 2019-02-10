@@ -1,0 +1,15 @@
+<!DOCTYPE html>
+<html lang="en" dir="ltr">
+  <head>
+    <meta charset="utf-8">
+  </head>
+  <a>
+  <a href="/game/{{ level+1 }}">Koniec kolejki</a>
+      {% extends "game.html" %}
+      {% block opponent_built %}
+          {% for i in opponent.districts_built %}
+               <td><a href="/warlord_destroy/{{ i.name }}"> <img src="/static/{{ i.name }}.jpg"/> Zburz</a></td>
+          {% endfor %}
+      {% endblock %}
+  </body>
+</html>

@@ -6,9 +6,12 @@
   <body>
     {% extends "cards.html" %}
     {% block play %}
-
+        Którą kartę wybierasz?
         <a href="/district/{{ a.name }}/{{ b.name }}/{{ character }}"/><img src="/static/{{ a.name }}.jpg"></a>
         <a href="/district/{{ b.name }}/{{ a.name }}/{{ character }}"/><img src="/static/{{ b.name }}.jpg"></a>
+        {%  if observatory == True %}
+            <a href="/district/{{ c.name }}/{{ c.name }}/{{ character }}"/><img src="/static/{{ c.name }}.jpg"></a>\
+        {%  endif %}
 
     {% endblock %}
   </body>

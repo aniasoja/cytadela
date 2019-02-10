@@ -6,8 +6,11 @@
 
       <style>
           aside{
-              max-width: 20%;
+              width: 20%;
               height: 100%;
+          }
+          section{
+              width: 60%;
           }
 
           .left {
@@ -43,44 +46,68 @@
               color: red;
           }
 
+          .small{
+              max-width: 30px;
+          }
+          td{
+              max-height: 50px;
+          }
+
       </style>
+      {% with messages = get_flashed_messages() %}
+  {% if messages %}
+    <ul class=flashes>
+    {% for message in messages %}
+      <li>{{ message }}</li>
+    {% endfor %}
+    </ul>
+  {% endif %}
+{% endwith %}
   </head>
   <body>
      <aside class="left">
         <div>
             <img src="/static/4a.jpg" class = "sidelist" alt="king">
-            {% if victim == 'king' %}<img src="/static/knife.jpg">{% endif %}{% if robbed == 'king' %}<img src="/static/pouch">{% endif %}
+                {% if victim == 'king' %}<img src="/static/knife.jpg" class="small">{% endif %}
+                {% if robbed == 'king' %}<img src="/static/pouch.jpg" class="small">{% endif %}
             <img src="/static/8a.jpg" class = "sidelist" alt="warlord">
-        {% if victim == 'warlord' %}<img src="/static/knife.jpg">{% endif %}{% if robbed == 'warlord' %}<img src="/static/pouch">{% endif %}
+                {% if victim == 'warlord' %}<img src="/static/knife.jpg" class="small">{% endif %}
+                {% if robbed == 'warlord' %}<img src="/static/pouch.jpg" class="small">{% endif %}
         </div>
         <div>
             <img src="/static/3a.jpg" class = "sidelist" alt="magician">
-            {% if victim == 'magician' %}<img src="/static/knife.jpg">{% endif %}{% if robbed == 'magician' %}<img src="/static/pouch">{% endif %}
+                {% if victim == 'magician' %}<img src="/static/knife.jpg" class="small">{% endif %}
+                {% if robbed == 'magician' %}<img src="/static/pouch.jpg" class="small">{% endif %}
             <img src="/static/7a.jpg" class = "sidelist" alt="architect">
-        {% if victim == 'warlord' %}<img src="/static/knife.jpg">{% endif %}{% if robbed == 'warlord' %}<img src="/static/pouch">{% endif %}
+                {% if victim == 'warlord' %}<img src="/static/knife.jpg" class="small">{% endif %}
+                {% if robbed == 'warlord' %}<img src="/static/pouch.jpg" class="small">{% endif %}
         </div>
         <div>
             <img src="/static/2a.jpg" class = "sidelist" alt="thief">
-            {% if victim == 'thief' %}<img src="/static/knife.jpg">{% endif %}
+                {% if victim == 'thief' %}<img src="/static/knife.jpg" class="small">{% endif %}
             <img src="/static/6a.jpg" class = "sidelist" alt="merchant">
-        {% if victim == 'merchant' %}<img src="/static/knife.jpg">{% endif %}{% if robbed == 'merchant' %}<img src="/static/pouch">{% endif %}
+                {% if victim == 'merchant' %}<img src="/static/knife.jpg" class="small">{% endif %}
+                {% if robbed == 'merchant' %}<img src="/static/pouch.jpg" class="small">{% endif %}
         </div>
         <div>
             <img src="/static/1a.jpg" class = "sidelist" alt="assassin">
             <img src="/static/5a.jpg" class = "sidelist" alt="bishop">
-            {% if victim == 'bishop' %}<img src="/static/knife.jpg">{% endif %}{% if robbed == 'bishop' %}<img src="/static/pouch">{% endif %}
+                {% if victim == 'bishop' %}<img src="/static/knife.jpg" class="small">{% endif %}
+                {% if robbed == 'bishop' %}<img src="/static/pouch.jpg" class="small">{% endif %}
         </div>
     </aside>
 
-    <section>
-        {% block content %}
-        {% endblock %}
-    </section>
      {% block bank %}
     <aside class = "right">
         <img src="/static/back.png" class = "important" alt="back">
         <img src="/static/bank.png" class = "important" alt="bank">
     </aside>
   {% endblock %}
+
+    <section>
+        {% block content %}
+        {% endblock %}
+    </section>
+
   </body>
 </html>

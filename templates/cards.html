@@ -21,9 +21,11 @@
                 <td><img src="/static/crown.jpg"/></td>
             {% endif %}
         <tr>
+        {% block opponent_built %}
             {% for i in opponent.districts_built %}
                <td> <img src="/static/{{ i.name }}.jpg"/> </td>
             {% endfor %}
+        {% endblock %}
         </tr>
         </table>
         </div>

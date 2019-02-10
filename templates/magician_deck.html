@@ -1,0 +1,18 @@
+<!DOCTYPE html>
+<html lang="en" dir="ltr">
+  <head>
+    <meta charset="utf-8">
+  </head>
+  <a>
+    {% extends "cards.html" %}
+    {% block districts %}
+        <form action = "/magician_deck" method = "post">
+            {% for i in next_player.districts_in_hand %}
+               <td><img src="/static/{{ i.name }}.jpg"/>
+                <input type="checkbox" name="card" value="{{ i.name }}">{{ i.name }}<br></td>
+            {% endfor %}
+            <input type="submit" value="Wymień">
+        </form>
+    {% endblock %}
+  </body>
+</html>

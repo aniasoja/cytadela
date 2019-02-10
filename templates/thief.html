@@ -8,8 +8,8 @@
     {% block play %}
 
         {% for i in all_characters %}
-            {% if i.name != 'assassin' %}
-                <a href="/assassin/{{ i.name }}"><img src="/static/{{ i.name }}.jpg"></a>
+            {% if i.name != 'assassin' and i.name != 'thief' %}
+                <a href="/thief/{{ i.name }}"><img src="/static/{{ i.name }}.jpg"></a>
             {% endif %}
         {% endfor %}
 

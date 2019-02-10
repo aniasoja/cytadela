@@ -15,13 +15,17 @@
             <a href="/skill/{{ character }}">Użyj zdolności postaci</a>
         {% endif %}
         {% if resources == False %}
-            <a href="/game">Koniec kolejki</a>
+            <a href="/game/{{ level+1 }}">Koniec kolejki</a>
         {% endif %}
 {% endblock %}
 {% block districts %}
-            {% if build == True and resources == False %}
+            {% if (build == True and resources == False) or (build == True and architect_count>0) %}
               {% for i in next_player.districts_in_hand %}
-                   <td><a href="/build/{{ i.name }}"> <img src="/static/{{ i.name }}.jpg" class="district"/>Wybuduj</a> </td>
+                  {% if architect_count>0 and architect_count<=4 %}
+                  <td><a href="/build/{{ i.name }}/{{ architect_count }}"> <img src="/static/{{ i.name }}.jpg" class="district"/>Wybuduj</a> </td>
+                  {% else %}
+                   <td><a href="/build/{{ i.name }}/0"> <img src="/static/{{ i.name }}.jpg" class="district"/>Wybuduj</a> </td>
+                  {% endif %}
                {% endfor %}
             {% else %}
                 {% for i in next_player.districts_in_hand %}
